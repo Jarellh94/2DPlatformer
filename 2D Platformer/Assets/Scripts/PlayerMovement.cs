@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour {
     public int maxJumps;
     private int extrajumps;
 
+    public Transform spawnPoint;
+
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -68,5 +70,10 @@ public class PlayerMovement : MonoBehaviour {
         Vector3 scaler = transform.localScale;
         scaler.x *= -1;
         transform.localScale = scaler;
+    }
+
+    public void Respawn()
+    {
+        transform.position = spawnPoint.position;
     }
 }
