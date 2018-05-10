@@ -10,7 +10,6 @@ public class Enemy : MonoBehaviour {
     public float walkSpeed;
 
     public float knockbackTime;
-    public float knockbackForce;
     float knockbackCounter = 0;
 
     Vector3 spawnPoint;
@@ -33,34 +32,41 @@ public class Enemy : MonoBehaviour {
 
         if (myState == EnemyState.PATROL)
         {
-            if (!stopped)
+           if (knockbackCounter == 0)
             {
-                if (knockbackCounter == 0)
-                {
-                    transform.Translate(new Vector3(walkDir * walkSpeed * Time.deltaTime, 0));
-                    //rb.velocity = new Vector2(walkDir * walkSpeed, rb.velocity.y);
+                transform.Translate(new Vector3(walkDir * walkSpeed * Time.deltaTime, 0));
+                //rb.velocity = new Vector2(walkDir * walkSpeed, rb.velocity.y);
 
-                    if (Mathf.Abs(transform.position.x - spawnPoint.x) > WalkRange)
-                    {
-                        stopped = true;
-                    }
-                }
-                else
+                if (transform.position.x - spawnPoint.x > WalkRange && walkDir > 0)
                 {
-                    knockbackCounter -= Time.deltaTime;
-
-                    if (knockbackCounter < 0)
-                        knockbackCounter = 0;
+                    Turn();
                 }
+                else if(transform.position.x - spawnPoint.x < WalkRange * -1 && walkDir < 0)
+                {
+                    Turn();
+                }
+
             }
             else
             {
-                stopped = false;
+                knockbackCounter -= Time.deltaTime;
 
-                walkDir *= -1;
+                if (knockbackCounter < 0)
+                {
+                    knockbackCounter = 0;
+                    rb.velocity = Vector2.zero;
+                }
             }
         }
 	}
+
+    void Turn()
+    {
+        walkDir *= -1;
+        Vector3 scaler = transform.localScale;
+        scaler.x *= -1;
+        transform.localScale = scaler;
+    }
 
     public void Respawn()
     {
@@ -68,10 +74,20 @@ public class Enemy : MonoBehaviour {
         walkDir = 1;
     }
 
-    public void Knockback(Vector2 direction)
+    public void Knockback(Vector2 direction, float knockbackForce)
     {
         knockbackCounter = knockbackTime;
 
-        rb.velocity = new Vector2(direction.x * knockbackForce, rb.velocity.y);
+        rb.velocity = Vector2.zero;
+
+        int dir = 1;
+
+        if (direction.x < 0)
+            dir = -1;
+
+        //Apply knockback force to entity by changing velocity and moving the transform. This seems to feel the best for me.
+        rb.velocity = new Vector2(dir * knockbackForce, 0);
+
+        transform.Translate(new Vector2(dir * knockbackForce, 0));
     }
 }

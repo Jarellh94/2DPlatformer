@@ -18,7 +18,7 @@ public class Health : MonoBehaviour {
 		
 	}
 
-    public void Damage(float value, Vector2 direction)
+    public void Damage(float value, Vector2 direction, float force)
     {
         health -= value;
         
@@ -26,7 +26,7 @@ public class Health : MonoBehaviour {
         if (health <= 0)
             Die();
         else
-            gameObject.GetComponent<Enemy>().Knockback(direction);
+            gameObject.GetComponent<Enemy>().Knockback(direction, force);
     }
 
     public void Die()

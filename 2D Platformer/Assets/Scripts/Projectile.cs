@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour {
 
     public float bulletSpeed;
     public float damage;
+    public float knockbackForce;
     public float range;
 
     int direction;
@@ -51,7 +52,7 @@ public class Projectile : MonoBehaviour {
 
             direction = direction.normalized;
 
-            othHealth.Damage(damage, direction);
+            othHealth.Damage(damage, direction, knockbackForce);
 
             Destroy(gameObject);
         }
