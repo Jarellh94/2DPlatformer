@@ -16,11 +16,14 @@ public class Killzone : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        other.SendMessage("Respawn");
+
+        /*
         PlayerMovement player = other.GetComponent<PlayerMovement>();
         
         if(player != null)
         {
             player.Respawn();
-        }
+        }*/
     }
 }

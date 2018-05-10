@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour {
     public float walkSpeed = 5f;
     public float runSpeed = 10f;
     public float jumpForce;
+    public float footStoolForce;
 
     private float moveInput;
     private bool facingRight = true;
@@ -17,6 +18,9 @@ public class PlayerMovement : MonoBehaviour {
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
+    public LayerMask enemyHead;
+
+    private bool onEnemyHead;
 
     public int maxJumps;
     private int extrajumps;
@@ -31,6 +35,8 @@ public class PlayerMovement : MonoBehaviour {
     void FixedUpdate()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+
+        onEnemyHead = Physics2D.OverlapCircle(groundCheck.position, checkRadius, enemyHead);
 
         moveInput = Input.GetAxis("Horizontal");
 
@@ -53,7 +59,11 @@ public class PlayerMovement : MonoBehaviour {
             extrajumps = maxJumps;
         }
 
-        if(Input.GetKeyDown(KeyCode.W) && extrajumps > 0)
+        if(onEnemyHead && Input.GetKey(KeyCode.W))
+        {
+            rb.velocity = Vector2.up * footStoolForce;
+        }
+        else if(Input.GetKeyDown(KeyCode.W) && extrajumps > 0)
         {
             rb.velocity = Vector2.up * jumpForce;
             extrajumps--;
