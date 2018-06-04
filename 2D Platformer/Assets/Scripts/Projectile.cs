@@ -5,9 +5,9 @@ using UnityEngine;
 public class Projectile : MonoBehaviour {
 
     public float bulletSpeed;
-    public float damage;
-    public float knockbackForce;
     public float range;
+    public int damage;
+    public float knockbackForce;
 
     int direction;
     bool fired;

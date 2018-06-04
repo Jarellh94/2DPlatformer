@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Health : MonoBehaviour {
+public abstract class Health : MonoBehaviour {
 
-    public float maxHealth;
+    public int maxHealth;
+    public float invincibleTime; //Invincibility timer
 
-    float health;
+    protected int health;
+
+    protected float invincibleCounter = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -15,24 +18,15 @@ public class Health : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(invincibleCounter > 0)
+        {
+            invincibleCounter -= Time.deltaTime;
+
+            if (invincibleCounter < 0)
+                invincibleCounter = 0;
+        }
 	}
 
-    public void Damage(float value, Vector2 direction, float force)
-    {
-        health -= value;
-        
-
-        if (health <= 0)
-            Die();
-        else
-            gameObject.GetComponent<Enemy>().Knockback(direction, force);
-    }
-
-    public void Die()
-    {
-        gameObject.GetComponent<Enemy>().Respawn();
-
-        health = maxHealth;
-    }
+    public abstract void Damage(int value, Vector2 direction, float force);
+    public abstract void Die();
 }

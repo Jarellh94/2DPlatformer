@@ -29,7 +29,7 @@ public class PlayerActions : MonoBehaviour {
             }
         }
 
-        else if (Input.GetKeyDown(KeyCode.J) && attackTimer == 0)
+        else if ((Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("Fire1")) && attackTimer == 0)
         {
             Attack();
         }

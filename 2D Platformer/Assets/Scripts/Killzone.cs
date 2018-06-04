@@ -16,7 +16,7 @@ public class Killzone : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        other.SendMessage("Respawn");
+        other.SendMessage("Die");
 
         /*
         PlayerMovement player = other.GetComponent<PlayerMovement>();

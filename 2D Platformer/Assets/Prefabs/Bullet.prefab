@@ -79,9 +79,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 15
-  damage: 10
-  knockbackForce: 3
   range: 25
+  damage: 1
+  knockbackForce: 3
 --- !u!212 &212684215543545438
 SpriteRenderer:
   m_ObjectHideFlags: 1

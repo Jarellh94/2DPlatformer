@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MeleeAttack : MonoBehaviour {
     
-    public float damage;
+    public int damage;
     public float knockbackForce;
 
     // Use this for initialization

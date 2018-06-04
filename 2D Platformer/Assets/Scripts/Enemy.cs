@@ -11,12 +11,20 @@ public class Enemy : MonoBehaviour {
 
     public float knockbackTime;
     float knockbackCounter = 0;
+    
+    private bool isGrounded;
+    private bool groundAhead;
+    public Transform groundCheck;
+    public Transform aheadCheck;
+    public float checkRadius;
 
     Vector3 spawnPoint;
 
     EnemyState myState = EnemyState.PATROL;
     bool stopped;
     int walkDir = 1;
+
+    public LayerMask whatIsGround;
 
     Rigidbody2D rb;
 
@@ -28,39 +36,48 @@ public class Enemy : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate ()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        groundAhead = Physics2D.OverlapCircle(aheadCheck.position, checkRadius, whatIsGround);
 
-        if (myState == EnemyState.PATROL)
+        if (isGrounded)
         {
-           if (knockbackCounter == 0)
+            if (myState == EnemyState.PATROL)
             {
-                transform.Translate(new Vector3(walkDir * walkSpeed * Time.deltaTime, 0));
-                //rb.velocity = new Vector2(walkDir * walkSpeed, rb.velocity.y);
-
-                if (transform.position.x - spawnPoint.x > WalkRange && walkDir > 0)
+                if (knockbackCounter == 0)
                 {
-                    Turn();
+                    transform.Translate(new Vector3(walkDir * walkSpeed * Time.deltaTime, 0));
+                    //rb.velocity = new Vector2(walkDir * walkSpeed, rb.velocity.y);
+
+                    /*if (transform.position.x - spawnPoint.x > WalkRange && walkDir > 0)
+                    {
+                        Turn();
+                    }
+                    else if (transform.position.x - spawnPoint.x < WalkRange * -1 && walkDir < 0)
+                    {
+                        Turn();
+                    }*/
+
+                    if (isGrounded && !groundAhead)
+                        Turn();
+
                 }
-                else if(transform.position.x - spawnPoint.x < WalkRange * -1 && walkDir < 0)
+                else
                 {
-                    Turn();
-                }
+                    knockbackCounter -= Time.deltaTime;
 
-            }
-            else
-            {
-                knockbackCounter -= Time.deltaTime;
-
-                if (knockbackCounter < 0)
-                {
-                    knockbackCounter = 0;
-                    rb.velocity = Vector2.zero;
+                    if (knockbackCounter < 0)
+                    {
+                        knockbackCounter = 0;
+                        rb.velocity = Vector2.zero;
+                    }
                 }
             }
         }
 	}
 
-    void Turn()
+    public void Turn()
     {
         walkDir *= -1;
         Vector3 scaler = transform.localScale;
@@ -86,8 +103,8 @@ public class Enemy : MonoBehaviour {
             dir = -1;
 
         //Apply knockback force to entity by changing velocity and moving the transform. This seems to feel the best for me.
-        rb.velocity = new Vector2(dir * knockbackForce, 0);
+        rb.velocity = new Vector2(dir * knockbackForce, knockbackForce/2);
 
-        transform.Translate(new Vector2(dir * knockbackForce, 0));
+        //transform.Translate(new Vector2(dir * knockbackForce, 0));
     }
 }
