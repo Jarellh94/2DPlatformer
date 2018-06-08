@@ -108,6 +108,9 @@ public class PlayerMovement : MonoBehaviour {
     {
         gameObject.SetActive(true);
         transform.position = spawnPoint.position;
+        Gun myGun = GetComponentInChildren<Gun>();
+
+        myGun.Respawn();
     }
 
     public void Knockback(Vector2 direction, float knockbackForce)

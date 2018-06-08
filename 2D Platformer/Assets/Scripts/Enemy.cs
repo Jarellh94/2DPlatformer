@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyState { PATROL, CHASE}
+public enum EnemyState { PATROL, CHASE, STOPPED}
 
 public class Enemy : MonoBehaviour {
 
@@ -11,7 +11,8 @@ public class Enemy : MonoBehaviour {
 
     public float knockbackTime;
     float knockbackCounter = 0;
-    
+    float freezeCounter = 0;
+
     private bool isGrounded;
     private bool groundAhead;
     public Transform groundCheck;
@@ -48,16 +49,6 @@ public class Enemy : MonoBehaviour {
                 if (knockbackCounter == 0)
                 {
                     transform.Translate(new Vector3(walkDir * walkSpeed * Time.deltaTime, 0));
-                    //rb.velocity = new Vector2(walkDir * walkSpeed, rb.velocity.y);
-
-                    /*if (transform.position.x - spawnPoint.x > WalkRange && walkDir > 0)
-                    {
-                        Turn();
-                    }
-                    else if (transform.position.x - spawnPoint.x < WalkRange * -1 && walkDir < 0)
-                    {
-                        Turn();
-                    }*/
 
                     if (isGrounded && !groundAhead)
                         Turn();
@@ -73,6 +64,15 @@ public class Enemy : MonoBehaviour {
                         rb.velocity = Vector2.zero;
                     }
                 }
+            }
+            if (myState == EnemyState.STOPPED)
+            {
+                if (freezeCounter <= 0)
+                {
+                    myState = EnemyState.PATROL;
+                }
+                else
+                    freezeCounter -= Time.deltaTime;
             }
         }
 	}
@@ -106,5 +106,12 @@ public class Enemy : MonoBehaviour {
         rb.velocity = new Vector2(dir * knockbackForce, knockbackForce/2);
 
         //transform.Translate(new Vector2(dir * knockbackForce, 0));
+    }
+
+    public void Freeze(float freezeTime)
+    {
+        myState = EnemyState.STOPPED;
+
+        freezeCounter = freezeTime;
     }
 }

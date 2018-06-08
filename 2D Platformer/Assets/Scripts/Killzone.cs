@@ -16,14 +16,6 @@ public class Killzone : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        other.SendMessage("Die");
-
-        /*
-        PlayerMovement player = other.GetComponent<PlayerMovement>();
-        
-        if(player != null)
-        {
-            player.Respawn();
-        }*/
+        other.SendMessage("Die"); //Sends message so that both enemies and players die when dropping below level.
     }
 }

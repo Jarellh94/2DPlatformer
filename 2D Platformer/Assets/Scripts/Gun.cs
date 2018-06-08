@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour {
 
-    public GameObject projectile;
+    public GameObject defaultProj;
     public Transform firePoint;
+
+    protected GameObject projectile;
+
+    private SpriteRenderer mySprite;
+    private Sprite defaultSprite;
+    private Vector3 defaultFirePoint;
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+        projectile = defaultProj;
+        mySprite = GetComponent<SpriteRenderer>();
+        defaultSprite = mySprite.sprite;
+        defaultFirePoint = firePoint.localPosition;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -34,5 +44,36 @@ public class Gun : MonoBehaviour {
             dir = false;
 
         newProj.GetComponent<Projectile>().Fire(dir);
+
+        mySprite.enabled = true;
+        CancelInvoke("DisableSprite");
+        Invoke("DisableSprite", 0.2f);
+    }
+
+    public void SetProjectile(GameObject newProj)
+    {
+        projectile = newProj;
+    }
+
+    public void SetFirePoint(Vector3 pos)
+    {
+        firePoint.localPosition = pos;
+    }
+
+    public void SetSprite(Sprite newSprite)
+    {
+        mySprite.sprite = newSprite;
+    }
+
+    void DisableSprite()
+    {
+        mySprite.enabled = false;
+    }
+
+    public void Respawn()
+    {
+        mySprite.sprite = defaultSprite;
+        projectile = defaultProj;
+        firePoint.localPosition = defaultFirePoint;
     }
 }

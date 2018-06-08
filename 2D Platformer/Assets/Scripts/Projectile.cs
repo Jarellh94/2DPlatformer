@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Effect { DAMAGE, SLOW, DROP};
+
 public class Projectile : MonoBehaviour {
 
     public float bulletSpeed;
     public float range;
     public int damage;
     public float knockbackForce;
+    public float freezeTime; //If the projectile has a freezing attribute
+    public Effect myEffect = Effect.DAMAGE;
 
     int direction;
     bool fired;
@@ -44,17 +48,30 @@ public class Projectile : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Health othHealth = other.GetComponent <Health>();
+        if (other.CompareTag("Player"))
+            return;
 
-        if(othHealth != null)
+
+        if(myEffect == Effect.SLOW)
         {
-            Vector2 direction = othHealth.transform.position - transform.position;
+            Enemy othEnemy = other.GetComponent<Enemy>();
 
-            direction = direction.normalized;
-
-            othHealth.Damage(damage, direction, knockbackForce);
-
-            Destroy(gameObject);
+            othEnemy.Freeze(freezeTime);
         }
+        else
+        {
+            Health othHealth = other.GetComponent<Health>();
+
+            if (othHealth != null)
+            {
+                Vector2 direction = othHealth.transform.position - transform.position;
+
+                direction = direction.normalized;
+
+                othHealth.Damage(damage, direction, knockbackForce);
+            }
+        }
+
+        Destroy(gameObject);
     }
 }

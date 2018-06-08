@@ -6,20 +6,13 @@ using UnityEngine.UI;
 public enum CollectableType { POLLEN, HONEYCOMB}
 
 public class Collector : MonoBehaviour {
-
-    public Text pollenText;
+    
+    //Text counts of number of colletable
+    public Text pollenText; 
+    public Text honeyText; 
 
     int pollenCount;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    int honeyCount;
 
     void OnTriggerEnter2D(Collider2D item)
     {
@@ -34,6 +27,10 @@ public class Collector : MonoBehaviour {
                 case CollectableType.POLLEN:
                     pollenCount += collect.Collected();
                     pollenText.text = pollenCount.ToString();
+                    break;
+                case CollectableType.HONEYCOMB:
+                    honeyCount += collect.Collected();
+                    honeyText.text = honeyCount.ToString();
                     break;
             }
         }

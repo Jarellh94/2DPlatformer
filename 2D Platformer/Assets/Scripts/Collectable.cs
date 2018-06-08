@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Class to be added to every collectable item.
+
 public class Collectable : MonoBehaviour {
 
     public int numValue;
