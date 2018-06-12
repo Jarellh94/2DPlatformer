@@ -35,6 +35,11 @@ public class Equip : MonoBehaviour {
                     break;
                 case EquipableType.MELEE:
                     break;
+                case EquipableType.ARMOR:
+                    PlayerHealth health = GetComponent<PlayerHealth>();
+                    health.ArmorUp(1);
+                    equipped.Collected();
+                    break;
             }
         }
     }

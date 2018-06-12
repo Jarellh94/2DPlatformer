@@ -27,4 +27,9 @@ public class PlayerHealth : Health {
         gameObject.GetComponent<PlayerMovement>().Invoke("Respawn", 2);
 
     }
+
+    public void ArmorUp(int value)
+    {
+        health += value;
+    }
 }

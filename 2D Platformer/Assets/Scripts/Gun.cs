@@ -14,12 +14,11 @@ public class Gun : MonoBehaviour {
     private Vector3 defaultFirePoint;
 
 	// Use this for initialization
-	void Start () {
-        projectile = defaultProj;
+	void Awake () {
         mySprite = GetComponent<SpriteRenderer>();
         defaultSprite = mySprite.sprite;
         defaultFirePoint = firePoint.localPosition;
-
+        Respawn();
     }
 	
 	// Update is called once per frame
@@ -43,7 +42,7 @@ public class Gun : MonoBehaviour {
         else
             dir = false;
 
-        newProj.GetComponent<Projectile>().Fire(dir);
+        newProj.GetComponent<Projectile>().Fire(dir, true);
 
         mySprite.enabled = true;
         CancelInvoke("DisableSprite");

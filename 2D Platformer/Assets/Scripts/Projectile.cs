@@ -16,10 +16,12 @@ public class Projectile : MonoBehaviour {
     int direction;
     bool fired;
     float initialLoc;
+    bool playerBullet = true;
+    Rigidbody2D rig;
 
 	// Use this for initialization
-	void Start () {
-		
+	void Awake () {
+        rig = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
@@ -27,15 +29,17 @@ public class Projectile : MonoBehaviour {
 		
         if(fired)
         {
-            transform.Translate(new Vector3(bulletSpeed * direction * Time.deltaTime, 0, 0));
+            //transform.Translate(new Vector3(bulletSpeed * direction * Time.deltaTime, 0, 0));
 
             if (Mathf.Abs(transform.position.x - initialLoc) > range)
                 Destroy(gameObject);
         }
 	}
 
-    public void Fire(bool right)
+    public void Fire(bool right, bool isPlayer)
     {
+        playerBullet = isPlayer;
+
         if (right)
             direction = 1;
         else
@@ -43,35 +47,64 @@ public class Projectile : MonoBehaviour {
 
         initialLoc = transform.position.x;
 
+        //rig = GetComponent<Rigidbody2D>();
+        rig.velocity = new Vector2(bulletSpeed * direction, 0);
+
         fired = true;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-            return;
 
-
-        if(myEffect == Effect.SLOW)
+        if (other.CompareTag("Player") && !playerBullet)
         {
-            Enemy othEnemy = other.GetComponent<Enemy>();
-
-            othEnemy.Freeze(freezeTime);
-        }
-        else
-        {
-            Health othHealth = other.GetComponent<Health>();
-
-            if (othHealth != null)
+            if (myEffect == Effect.SLOW)
             {
-                Vector2 direction = othHealth.transform.position - transform.position;
+                PlayerMovement othEnemy = other.GetComponent<PlayerMovement>();
 
-                direction = direction.normalized;
-
-                othHealth.Damage(damage, direction, knockbackForce);
+                othEnemy.Freeze(freezeTime);
             }
+            else
+            {
+                Health othHealth = other.GetComponent<Health>();
+
+                if (othHealth != null)
+                {
+                    Vector2 direction = othHealth.transform.position - transform.position;
+
+                    direction = direction.normalized;
+
+                    othHealth.Damage(damage, direction, knockbackForce);
+                }
+            }
+
+            Destroy(gameObject);
         }
 
-        Destroy(gameObject);
+        if (other.CompareTag("Enemy") && playerBullet)
+        {
+            if (myEffect == Effect.SLOW)
+            {
+                Enemy othEnemy = other.GetComponent<Enemy>();
+
+                othEnemy.Freeze(freezeTime);
+            }
+            else
+            {
+                Health othHealth = other.GetComponent<Health>();
+
+                if (othHealth != null)
+                {
+                    Vector2 direction = othHealth.transform.position - transform.position;
+
+                    direction = direction.normalized;
+
+                    othHealth.Damage(damage, direction, knockbackForce);
+                }
+            }
+
+            Destroy(gameObject);
+        }
+
     }
 }

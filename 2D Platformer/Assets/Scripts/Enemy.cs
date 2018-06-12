@@ -114,4 +114,9 @@ public class Enemy : MonoBehaviour {
 
         freezeCounter = freezeTime;
     }
+
+    public int GetDirection()
+    {
+        return walkDir;
+    }
 }

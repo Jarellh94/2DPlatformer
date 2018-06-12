@@ -33,6 +33,8 @@ public class PlayerMovement : MonoBehaviour {
     public float knockbackTime;
     float knockbackCounter = 0;
 
+    float freezeCounter = 0;
+
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -67,7 +69,8 @@ public class PlayerMovement : MonoBehaviour {
         {
             extrajumps = maxJumps;
         }
-        if (knockbackCounter == 0)
+
+        if (knockbackCounter == 0 && freezeCounter == 0)
         {
 
             if (onEnemyHead && (Input.GetKey(KeyCode.W) || Input.GetButton("Jump")))
@@ -86,12 +89,23 @@ public class PlayerMovement : MonoBehaviour {
         }
         else
         {
-            knockbackCounter -= Time.deltaTime;
-
-            if (knockbackCounter < 0)
+            if (knockbackCounter > 0)
             {
-                knockbackCounter = 0;
-                rb.velocity = Vector2.zero;
+                knockbackCounter -= Time.deltaTime;
+
+                if (knockbackCounter < 0)
+                {
+                    knockbackCounter = 0;
+                    rb.velocity = Vector2.zero;
+                }
+            }
+
+            if(freezeCounter > 0)
+            {
+                freezeCounter -= Time.deltaTime;
+
+                if (freezeCounter < 0)
+                    freezeCounter = 0;
             }
         }
     }
@@ -128,5 +142,10 @@ public class PlayerMovement : MonoBehaviour {
         rb.velocity = new Vector2(dir * knockbackForce, knockbackForce / 2);
 
         //transform.Translate(new Vector2(dir * knockbackForce, 0));
+    }
+
+    public void Freeze(float freezeTime)
+    {
+        freezeCounter = freezeTime;
     }
 }
