@@ -107,4 +107,9 @@ public class Projectile : MonoBehaviour {
         }
 
     }
+
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
 }

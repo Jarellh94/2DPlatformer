@@ -27,7 +27,7 @@ public class EnemyShooter : MonoBehaviour {
         }
 	}
 
-    void Fire()
+    public void Fire()
     {
         GameObject newProj = Instantiate(projectile, firePoint.position, Quaternion.identity);
         Projectile proj = newProj.GetComponent<Projectile>();

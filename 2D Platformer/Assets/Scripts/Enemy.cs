@@ -5,7 +5,7 @@ using UnityEngine;
 public enum EnemyState { PATROL, CHASE, STOPPED}
 
 public class Enemy : MonoBehaviour {
-
+    
     public float WalkRange;
     public float walkSpeed;
 
@@ -19,14 +19,16 @@ public class Enemy : MonoBehaviour {
     public Transform aheadCheck;
     public float checkRadius;
 
+    public LayerMask whatIsGround;
+
     Vector3 spawnPoint;
+
+    Transform player;
 
     EnemyState myState = EnemyState.PATROL;
     bool stopped;
     int walkDir = 1;
-
-    public LayerMask whatIsGround;
-
+    
     Rigidbody2D rb;
 
 	// Use this for initialization
@@ -52,7 +54,6 @@ public class Enemy : MonoBehaviour {
 
                     if (isGrounded && !groundAhead)
                         Turn();
-
                 }
                 else
                 {
@@ -65,7 +66,7 @@ public class Enemy : MonoBehaviour {
                     }
                 }
             }
-            if (myState == EnemyState.STOPPED)
+            else if (myState == EnemyState.STOPPED)
             {
                 if (freezeCounter <= 0)
                 {
@@ -74,6 +75,21 @@ public class Enemy : MonoBehaviour {
                 else
                     freezeCounter -= Time.deltaTime;
             }
+            else if(myState == EnemyState.CHASE)
+            {
+                if(player.position.x < transform.position.x || player.position.x > transform.position.x)
+                {
+                    transform.Translate(new Vector3(walkDir * walkSpeed * Time.deltaTime, 0));
+
+                    if (walkDir > 0 && player.position.x < transform.position.x)
+                        Turn();
+
+                    if (walkDir < 0 && player.position.x > transform.position.x)
+                        Turn();
+                }
+
+            }
+
         }
 	}
 
@@ -118,5 +134,17 @@ public class Enemy : MonoBehaviour {
     public int GetDirection()
     {
         return walkDir;
+    }
+
+    public void SeePlayer(Transform playerTransform)
+    {
+        player = playerTransform;
+        myState = EnemyState.CHASE;
+
+        if (walkDir > 0 && playerTransform.position.x < transform.position.x)
+            Turn();
+
+        if (walkDir < 0 && playerTransform.position.x > transform.position.x)
+            Turn();
     }
 }

@@ -35,9 +35,10 @@ public class EnemyTouch : MonoBehaviour {
             }
         }
 
-        if(other.GetComponent<Enemy>())
+        if(other.GetComponent<Enemy>() != null)
         {
-            gameObject.GetComponent<Enemy>().Turn();
+            if(gameObject.GetComponent<Enemy>() != null)
+                gameObject.GetComponent<Enemy>().Turn();
         }
     }
 
@@ -59,9 +60,12 @@ public class EnemyTouch : MonoBehaviour {
             }
         }
 
-        if (other.GetComponent<Enemy>())
+        
+
+        if (other.GetComponent<Enemy>() != null)
         {
-            gameObject.GetComponent<Enemy>().Turn();
+            if (gameObject.GetComponent<Enemy>() != null)
+                gameObject.GetComponent<Enemy>().Turn();
         }
     }
 }

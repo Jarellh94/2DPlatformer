@@ -3,7 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : Health {
-    
+
+    public int lives;
+
+    PlayerUIManager playerUi;
+
+    void Awake()
+    {
+        playerUi = GetComponent<PlayerUIManager>();
+        playerUi.UpdateLives(lives);
+    }
+
     public override void Damage(int value, Vector2 direction, float force)
     {
         if (invincibleCounter <= 0)
@@ -23,6 +33,10 @@ public class PlayerHealth : Health {
         gameObject.SetActive(false);
 
         health = maxHealth;
+
+        lives--;
+
+        playerUi.UpdateLives(lives);
 
         gameObject.GetComponent<PlayerMovement>().Invoke("Respawn", 2);
 

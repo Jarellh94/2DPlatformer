@@ -8,11 +8,18 @@ public enum CollectableType { POLLEN, HONEYCOMB}
 public class Collector : MonoBehaviour {
     
     //Text counts of number of colletable
-    public Text pollenText; 
-    public Text honeyText; 
 
-    int pollenCount;
-    int honeyCount;
+    int pollenCount = 0;
+    int honeyCount = 0;
+
+    PlayerUIManager playerUi;
+
+    void Awake()
+    {
+        playerUi = GetComponent<PlayerUIManager>();
+        playerUi.UpdatePollenCount(pollenCount);
+        playerUi.UpdateHoneyCount(honeyCount);
+    }
 
     void OnTriggerEnter2D(Collider2D item)
     {
@@ -26,11 +33,13 @@ public class Collector : MonoBehaviour {
             {
                 case CollectableType.POLLEN:
                     pollenCount += collect.Collected();
-                    pollenText.text = pollenCount.ToString();
+                    //pollenText.text = pollenCount.ToString();
+                    playerUi.UpdatePollenCount(pollenCount);
                     break;
                 case CollectableType.HONEYCOMB:
                     honeyCount += collect.Collected();
-                    honeyText.text = honeyCount.ToString();
+                    //honeyText.text = honeyCount.ToString();
+                    playerUi.UpdateHoneyCount(honeyCount);
                     break;
             }
         }
