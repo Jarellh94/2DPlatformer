@@ -6,6 +6,7 @@ public class EnemyShooter : MonoBehaviour {
     
     public GameObject projectile;
     public Transform firePoint;
+    public bool autoShoot = true;
     public float shootDelay;
 
     private SpriteRenderer mySprite;
@@ -18,12 +19,16 @@ public class EnemyShooter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(shootCounter > 0)
-            shootCounter -= Time.deltaTime;
-        else
+
+        if (autoShoot)
         {
-            shootCounter = shootDelay;
-            Fire();
+            if (shootCounter > 0)
+                shootCounter -= Time.deltaTime;
+            else
+            {
+                shootCounter = shootDelay;
+                Fire();
+            }
         }
 	}
 

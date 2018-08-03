@@ -44,4 +44,14 @@ public class Collector : MonoBehaviour {
             }
         }
     }
+
+    public int GetPollenCount()
+    {
+        return pollenCount;
+    }
+
+    public int GetHoneyCount()
+    {
+        return honeyCount;
+    }
 }

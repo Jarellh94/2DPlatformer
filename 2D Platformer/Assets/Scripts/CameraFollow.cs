@@ -9,9 +9,7 @@ public class CameraFollow : MonoBehaviour {
     public float smoothSpeed = 0.125f;
     public List<Transform> targets;
     Camera cam;
-
-
-
+    
 	// Use this for initialization
 	void Start () {
         cam = GetComponent<Camera>();
@@ -20,13 +18,14 @@ public class CameraFollow : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate() {
         Follow();
+        Zoom();
 	}
 
     public void Follow()
     {
         if(targets.Count > 0)
         {
-            if(targets.Count == 1)
+            //if(targets.Count == 1)
             {
                 Vector3 targetPostion = targets[0].position;
                 float nX = transform.position.x, nY = transform.position.y;
@@ -55,6 +54,25 @@ public class CameraFollow : MonoBehaviour {
                 //transform.position = Vector3.MoveTowards(transform.position, new Vector3(nX, nY, -10), cameraSpeed * Time.smoothDeltaTime);
                 //transform.position = Vector3.Lerp(transform.position, new Vector3(nX, nY, -10), smoothSpeed);
             }
+        }
+    }
+
+    void Zoom()
+    {
+        if(targets.Count > 1)
+        {
+            int maxTarget = 0, minTarget = 1;
+
+            for(int i = 0; i < targets.Count; i++)
+            {
+                if (targets[maxTarget].transform.position.x < targets[i].transform.position.x)
+                    maxTarget = i;
+
+                if(targets[minTarget].transform.position.x > targets[i].transform.position.x)
+                    minTarget = i;
+            }
+
+            cam.orthographicSize = 10 + ((targets[maxTarget].transform.position.x - targets[minTarget].transform.position.x) / 15);
         }
     }
 }

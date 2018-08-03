@@ -14,14 +14,15 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetButtonDown("Start"))
-        {
-            if (!gamePaused)
-                Pause();
-            else
-                Resume();
-        }
 	}
+
+    public void PausePressed()
+    {
+        if (!gamePaused)
+            Pause();
+        else
+            Resume();
+    }
 
     public void Pause()
     {

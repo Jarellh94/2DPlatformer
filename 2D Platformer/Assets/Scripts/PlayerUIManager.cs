@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerUIManager : MonoBehaviour {
     
+    public GameObject myPanel;
+
     public Text pollenText;
     public Text honeyText;
     public Text livesText;
@@ -32,5 +34,10 @@ public class PlayerUIManager : MonoBehaviour {
     public void UpdateLives(int num)
     {
         livesText.text = "Lives: " + num.ToString();
+    }
+
+    public void ActivatePanel()
+    {
+        myPanel.SetActive(true);
     }
 }

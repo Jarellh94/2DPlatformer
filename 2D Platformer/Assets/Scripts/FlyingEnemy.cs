@@ -16,7 +16,6 @@ public class FlyingEnemy : MonoBehaviour {
     float dropCounter = 0;
 
     EnemyShooter myShooter;
-    Rigidbody2D rig;
 
     Transform player;
     float startX;
@@ -24,7 +23,6 @@ public class FlyingEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         myShooter = GetComponent<EnemyShooter>();
-        rig = GetComponent<Rigidbody2D>();
         startX = transform.position.x;
 	}
 	

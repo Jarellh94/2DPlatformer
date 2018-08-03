@@ -28,19 +28,16 @@ public class PlayerActions : MonoBehaviour {
                 hitCollider.SetActive(false);
             }
         }
-
-        else if ((Input.GetKeyDown(KeyCode.J) || Input.GetButtonDown("Fire1")) && attackTimer == 0)
-        {
-            Attack();
-        }
-
-
+        
 	}
 
-    private void Attack()
+    public void Attack()
     {
-        //hitCollider.enabled = true;
-        hitCollider.SetActive(true);
-        attackTimer = attackTime;
+        if (attackTimer == 0)
+        {
+            //hitCollider.enabled = true;
+            hitCollider.SetActive(true);
+            attackTimer = attackTime;
+        }
     }
 }
